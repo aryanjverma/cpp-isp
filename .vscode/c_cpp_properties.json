@@ -1,0 +1,22 @@
+{
+    "configurations": [
+      {
+        "name": "Win32",
+        "intelliSenseMode": "windows-gcc-x64",
+        "compilerPath": "C:/MinGW/bin/g++.exe",
+        "includePath": [
+          "${workspaceFolder}/**",
+          "C:/opencv/build/include", // Add OpenCV include directory
+          "C:/MinGW/include"         // Add MinGW include directory
+        ],
+        "defines": [
+          "_DEBUG",
+          "UNICODE",
+          "_UNICODE"
+        ],
+        "cStandard": "c17",
+        "cppStandard": "c++17"
+      }
+    ],
+    "version": 4
+  }
