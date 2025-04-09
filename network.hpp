@@ -20,6 +20,7 @@ float generate_random_float(float min, float max) {
 }
 
 vector<float> generate_random_array(int size, float min = 0.0f, float max = 1.0f) {
+    // Generate a random array of floats between min and max
     vector<float> array;
     for(int i=0; i < size; i++){
         array.push_back(generate_random_float(min,max));
@@ -38,22 +39,10 @@ public:
         input_size = Input_Size;
         init();
     }
-    NeuralNetwork(vector<int> Layer_Sizes, int Input_Size, vector<vector<vector<float>>> Weights, vector<vector<float>> Biases){
-        layer_sizes = Layer_Sizes;
-        input_size = Input_Size;
-        weights = Weights;
-        biases = Biases;
-    }
     vector<float> feed_forward(vector<float> input){
+        // Runs the input through the network and returns the output
         for(int i = 0 ;i < layer_sizes.size(); i++){
             input = sigmoid(add(dot(input,weights[i]),biases[i]));
-            /*
-            for(vector<float> x: weights[i]){
-                print(x);
-            }
-            print(input);
-            */
-            
         }
         return input;
     }
@@ -175,36 +164,8 @@ public:
     
     
 private:
-vector<vector<float>> transpose(const vector<vector<float>>& matrix) {
-    if(matrix.empty()) return vector<vector<float>>();
-    
-    vector<vector<float>> transposed(matrix[0].size(), vector<float>(matrix.size()));
-    for (size_t i = 0; i < matrix.size(); ++i) {
-        for (size_t j = 0; j < matrix[0].size(); ++j) {
-            transposed[j][i] = matrix[i][j];
-        }
-    }
-    return transposed;
-    }
-    void checkVectorSizes() {
-        cout << "Layer sizes: ";
-        for(auto size : layer_sizes) cout << size << " ";
-        cout << endl;
-        
-        cout << "Weights dimensions: " << endl;
-        for(int i = 0; i < weights.size(); i++) {
-            cout << "Layer " << i << ": " << weights[i].size() << " x ";
-            if(!weights[i].empty()) cout << weights[i][0].size();
-            cout << endl;
-        }
-        
-        cout << "Biases dimensions: " << endl;
-        for(int i = 0; i < biases.size(); i++) {
-            cout << "Layer " << i << ": " << biases[i].size() << endl;
-        }
-    }
-    
-
+    // Initialize weights and biases
+    // The weights and biases are initialized to small random values
     void init(){
         for (int i = 0; i < layer_sizes.size(); i ++){
             if(i == 0){
@@ -252,15 +213,18 @@ vector<vector<float>> transpose(const vector<vector<float>>& matrix) {
 
         return;
     }
+    //derivative of sigmoid
     float d_sigmoid(float y){
         return sigmoid(y) * (1 - sigmoid(y));
     }
+    //for vectors
     vector<float> d_sigmoid(vector<float> y){
         for(int i = 0; i < y.size(); i ++){
             y[i] = d_sigmoid(y[i]);
         }
         return y;
     }
+    //technically it's leaky relu, but yeah
     float relu(float y){
         if(y < 0){
             return y * 0.01;
@@ -269,21 +233,25 @@ vector<vector<float>> transpose(const vector<vector<float>>& matrix) {
             return y;
         }
     }
+    //for vectors
     vector<float> relu(vector<float> y){
         for(int i = 0; i < y.size(); i ++){
             y[i] = relu(y[i]);
         }
         return y;
     }
+    //sigmoid function
     float sigmoid(float y){
         return 1 / (1 + exp(-1 * y));
     }
+    //sigmoid for vectors
     vector<float> sigmoid(vector<float> y){
         for(int i = 0; i < y.size(); i ++){
             y[i] = sigmoid(y[i]);
         }
         return y;
     }
+    //dot product for 2D arrays by vectors
     vector<float> dot(vector<float> input, vector<vector<float>> weights){
         vector<float> product(weights.size(), 0.0f);
         for(int i = 0; i < weights.size(); i++){
@@ -291,6 +259,7 @@ vector<vector<float>> transpose(const vector<vector<float>>& matrix) {
         }
         return product;
     }
+    //dot product for 1D arrays by vectors
     float dot(vector<float> input, vector<float> weights){
         float product = 0.0f;
         for(int i = 0; i < input.size(); i++){
@@ -298,6 +267,7 @@ vector<vector<float>> transpose(const vector<vector<float>>& matrix) {
         }
         return product;
     }
+    //adding two vectors
     vector<float> add(vector<float> one, vector<float> two){
         vector<float> sum(one.size());
         for(int i = 0; i < one.size(); i++){
@@ -310,6 +280,7 @@ vector<vector<float>> transpose(const vector<vector<float>>& matrix) {
         }
         return sum;
     }
+    //negating a vector
     vector<float> negate(vector<float> one){
         vector<float> negated(one.size());
         for(int i = 0; i < one.size(); i++){

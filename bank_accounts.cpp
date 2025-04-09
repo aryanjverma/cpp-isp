@@ -7,6 +7,7 @@ using namespace std;
 
 int balance;
 int balanceLine;
+//declaring global variables
 
 void createAccount();
 void accessAccount();
@@ -14,12 +15,14 @@ bool authenticate(string user, string pass);
 void withdraw();
 void deposit();
 void updateAccount();
+//declaring functions to access and change stuff
 
 int main(){
     string response;
     while(response != "3"){
         cout << "Welcome to the bank\n";
         cout << "What do you wanna do?\n";
+        //user is prompted to choose an option of what they want to do
         cout << "1. Create account.\n";
         cout << "2. Access account.\n";
         cout << "3. Leave the bank.\n";
@@ -33,10 +36,12 @@ int main(){
         }
         else if(response == "3"){
             cout << "bye";
+            //ends program
             return 0;
         }
         else{
             cout << "please enter a number 1-3\n";
+            //if user doesn't enter a valid number, they are prompted to enter a number again
         }
     }
     return 0;
@@ -44,6 +49,7 @@ int main(){
 
 void createAccount(){
     fstream myFile;
+    //opens file to write to
     myFile.open("user_info.txt",ios::app);
     if(myFile.is_open()){
         string username;
@@ -55,9 +61,9 @@ void createAccount(){
         cout << "Print password: ";
         getline(cin, password);
         myFile << password << '\n';
-        
+        //makes user create username and password
         myFile << 0 << '\n';
-        
+        //initalizes account balance to 0
         myFile.close();
     }
 }
@@ -72,9 +78,11 @@ void accessAccount(){
         getline(cin,username);
         cout << "Enter password: ";
         getline(cin,password);
+        //asks user for username and password
         bool success = authenticate(username,password);
         if(success){
             break;
+            //if user enters correct username and password, break out of loop
         }
         else{
             while(true){
@@ -91,7 +99,8 @@ void accessAccount(){
                 else{
                     cout << "enter valid response\n";
                 }
-            }   
+            }
+            //if user enters incorrect username and password, they are prompted to try again or leave   
         }
     }
     while(true){
@@ -121,6 +130,9 @@ void accessAccount(){
 }
 
 bool authenticate(string user, string pass){
+    //checks if user and pass are in the file
+    //if they are, it returns true and sets the balance to the balance in the file
+    //if they aren't, it returns false and sets the balance to 0
     fstream myFile;
     myFile.open("user_info.txt",ios::in);
     string line;
@@ -155,6 +167,8 @@ bool authenticate(string user, string pass){
 }
 
 void withdraw(){
+    //withdraws money from account
+    //if the amount is greater than the balance, it terminates and gives user an error message  
     string amount; 
     cout << "How much money would you like to withdraw: ";
     getline(cin, amount);
@@ -170,6 +184,7 @@ void withdraw(){
 }
 
 void deposit(){
+    //puts money into account
     string amount; 
     cout << "How much money would you like to deposit: ";
     getline(cin, amount);
@@ -179,6 +194,10 @@ void deposit(){
 }
 
 void updateAccount(){
+    //updates the account balance in the file
+    //opens the file and reads all the lines into a vector
+    //then it updates the line with the balance and writes the vector back to the file
+    //this is done to avoid having to rewrite the entire file every time the balance changes
     fstream myFile;
     myFile.open("user_info.txt",ios::in);
     string line;

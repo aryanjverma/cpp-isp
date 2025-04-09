@@ -22,6 +22,7 @@ int main(){
     vector<float> prediction = nn.feed_forward(image);
     cout << "Prediction: \n";
     print(prediction);
+    cout << "The model chooses: " << max_element(prediction.begin(), prediction.end()) - prediction.begin() << endl;
     return 0;
 }
 vector<float> process_image(string path){
